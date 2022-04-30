@@ -1,0 +1,1899 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>2560</width>
+    <height>1286</height>
+   </rect>
+  </property>
+  <property name="palette">
+   <palette>
+    <active>
+     <colorrole role="Base">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Window">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>199</red>
+        <green>228</green>
+        <blue>236</blue>
+       </color>
+      </brush>
+     </colorrole>
+    </active>
+    <inactive>
+     <colorrole role="Base">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Window">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>199</red>
+        <green>228</green>
+        <blue>236</blue>
+       </color>
+      </brush>
+     </colorrole>
+    </inactive>
+    <disabled>
+     <colorrole role="Base">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>199</red>
+        <green>228</green>
+        <blue>236</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Window">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>199</red>
+        <green>228</green>
+        <blue>236</blue>
+       </color>
+      </brush>
+     </colorrole>
+    </disabled>
+   </palette>
+  </property>
+  <property name="font">
+   <font>
+    <pointsize>1</pointsize>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>Options Filters</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QLineEdit" name="leFileName">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>50</y>
+      <width>171</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QLabel" name="fNameLabel">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>54</y>
+      <width>101</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>File Name:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QTableView" name="table">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>320</y>
+      <width>2141</width>
+      <height>811</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pbLoadFile">
+    <property name="geometry">
+     <rect>
+      <x>2140</x>
+      <y>200</y>
+      <width>161</width>
+      <height>46</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 228, 200); 
+border-color: rgb(9, 161, 255);</string>
+    </property>
+    <property name="text">
+     <string>Load Data</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leDelRow_1">
+    <property name="geometry">
+     <rect>
+      <x>2430</x>
+      <y>206</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbCurPri">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>54</y>
+      <width>131</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Current Price:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leCurPri">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>50</y>
+      <width>131</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="rbCall">
+    <property name="geometry">
+     <rect>
+      <x>1460</x>
+      <y>234</y>
+      <width>71</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Call</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="rbPut">
+    <property name="geometry">
+     <rect>
+      <x>1460</x>
+      <y>268</y>
+      <width>71</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Put</string>
+    </property>
+   </widget>
+   <widget class="QDateEdit" name="deCurDat">
+    <property name="geometry">
+     <rect>
+      <x>721</x>
+      <y>48</y>
+      <width>181</width>
+      <height>35</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="displayFormat">
+     <string>dd MMM yyyy</string>
+    </property>
+    <property name="calendarPopup">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbCurDat">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>50</y>
+      <width>131</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Current Date:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QDateEdit" name="deExpDat1">
+    <property name="geometry">
+     <rect>
+      <x>1441</x>
+      <y>48</y>
+      <width>181</width>
+      <height>35</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="displayFormat">
+     <string>dd MMM yyyy</string>
+    </property>
+    <property name="calendarPopup">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbExpDat1">
+    <property name="geometry">
+     <rect>
+      <x>1340</x>
+      <y>50</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Exp Date 1:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QDateEdit" name="deExpDat2">
+    <property name="geometry">
+     <rect>
+      <x>1730</x>
+      <y>48</y>
+      <width>181</width>
+      <height>35</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="displayFormat">
+     <string>dd MMM yyyy</string>
+    </property>
+    <property name="calendarPopup">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbExpDat2">
+    <property name="geometry">
+     <rect>
+      <x>1629</x>
+      <y>50</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Exp Date 2:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leStrCurMin">
+    <property name="geometry">
+     <rect>
+      <x>318</x>
+      <y>107</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbStrCurMin">
+    <property name="geometry">
+     <rect>
+      <x>22</x>
+      <y>110</y>
+      <width>281</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Strike Price / Current Price Min:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbStrCurMax">
+    <property name="geometry">
+     <rect>
+      <x>28</x>
+      <y>160</y>
+      <width>281</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Strike Price / Current Price Max:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leStrCurMax">
+    <property name="geometry">
+     <rect>
+      <x>317</x>
+      <y>157</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbBidVolMin">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>110</y>
+      <width>181</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Bid-Volatility Min %:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leBidVolMin">
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>107</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbBidVolMax">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>160</y>
+      <width>191</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Bid-Volatility Max %:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leBidVolMax">
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>157</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbDelMin">
+    <property name="geometry">
+     <rect>
+      <x>953</x>
+      <y>110</y>
+      <width>101</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Delta Min:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leDelMin">
+    <property name="geometry">
+     <rect>
+      <x>1060</x>
+      <y>107</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leDelMax">
+    <property name="geometry">
+     <rect>
+      <x>1060</x>
+      <y>157</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbDelMax">
+    <property name="geometry">
+     <rect>
+      <x>953</x>
+      <y>160</y>
+      <width>101</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Delta Max:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leBidAsk">
+    <property name="geometry">
+     <rect>
+      <x>1237</x>
+      <y>157</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbBidAsk">
+    <property name="geometry">
+     <rect>
+      <x>1140</x>
+      <y>160</y>
+      <width>91</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Ask - Bid:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="cbFid">
+    <property name="geometry">
+     <rect>
+      <x>1580</x>
+      <y>200</y>
+      <width>121</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Fidelity</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="cbMarWat">
+    <property name="geometry">
+     <rect>
+      <x>1580</x>
+      <y>232</y>
+      <width>151</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>MarketWatch</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="cbExc">
+    <property name="geometry">
+     <rect>
+      <x>1760</x>
+      <y>212</y>
+      <width>121</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Open Excel</string>
+    </property>
+   </widget>
+   <widget class="Line" name="line_2">
+    <property name="geometry">
+     <rect>
+      <x>1422</x>
+      <y>184</y>
+      <width>16</width>
+      <height>121</height>
+     </rect>
+    </property>
+    <property name="lineWidth">
+     <number>3</number>
+    </property>
+    <property name="midLineWidth">
+     <number>3</number>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="Line" name="line">
+    <property name="geometry">
+     <rect>
+      <x>1430</x>
+      <y>175</y>
+      <width>1071</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="lineWidth">
+     <number>3</number>
+    </property>
+    <property name="midLineWidth">
+     <number>3</number>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pbClose">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>1166</y>
+      <width>113</width>
+      <height>46</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 228, 200); 
+border-color: rgb(9, 161, 255);</string>
+    </property>
+    <property name="text">
+     <string>Close</string>
+    </property>
+   </widget>
+   <widget class="QDateEdit" name="deExpDat3">
+    <property name="geometry">
+     <rect>
+      <x>2021</x>
+      <y>48</y>
+      <width>181</width>
+      <height>35</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="displayFormat">
+     <string>dd MMM yyyy</string>
+    </property>
+    <property name="calendarPopup">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbExpDat3">
+    <property name="geometry">
+     <rect>
+      <x>1920</x>
+      <y>50</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Exp Date 3:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QDateEdit" name="deExpDat4">
+    <property name="geometry">
+     <rect>
+      <x>2311</x>
+      <y>48</y>
+      <width>181</width>
+      <height>35</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="displayFormat">
+     <string>dd MMM yyyy</string>
+    </property>
+    <property name="calendarPopup">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbExpDat4">
+    <property name="geometry">
+     <rect>
+      <x>2210</x>
+      <y>50</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Exp Date 4:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pbMatTim1">
+    <property name="geometry">
+     <rect>
+      <x>1340</x>
+      <y>106</y>
+      <width>121</width>
+      <height>38</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 228, 200); 
+border-color: rgb(9, 161, 255);</string>
+    </property>
+    <property name="text">
+     <string>Mat Time 1</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leMatTim1">
+    <property name="geometry">
+     <rect>
+      <x>1470</x>
+      <y>107</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pbMatTim2">
+    <property name="geometry">
+     <rect>
+      <x>1629</x>
+      <y>106</y>
+      <width>131</width>
+      <height>38</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 228, 200); 
+border-color: rgb(9, 161, 255);</string>
+    </property>
+    <property name="text">
+     <string>Mat Time 2</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leMatTim2">
+    <property name="geometry">
+     <rect>
+      <x>1770</x>
+      <y>107</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pbMatTim3">
+    <property name="geometry">
+     <rect>
+      <x>1919</x>
+      <y>106</y>
+      <width>131</width>
+      <height>38</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 228, 200); 
+border-color: rgb(9, 161, 255);</string>
+    </property>
+    <property name="text">
+     <string>Mat Time 3</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leMatTim3">
+    <property name="geometry">
+     <rect>
+      <x>2060</x>
+      <y>107</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leMatTim4">
+    <property name="geometry">
+     <rect>
+      <x>2351</x>
+      <y>107</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pbMatTim4">
+    <property name="geometry">
+     <rect>
+      <x>2210</x>
+      <y>106</y>
+      <width>131</width>
+      <height>38</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 228, 200); 
+border-color: rgb(9, 161, 255);</string>
+    </property>
+    <property name="text">
+     <string>Mat Time 4</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="rbAll">
+    <property name="geometry">
+     <rect>
+      <x>1460</x>
+      <y>200</y>
+      <width>100</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>All</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbBTLTC">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>1180</y>
+      <width>741</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="palette">
+     <palette>
+      <active>
+       <colorrole role="WindowText">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Button">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>233</red>
+          <green>0</green>
+          <blue>33</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Light">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>94</green>
+          <blue>117</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Midlight">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>244</red>
+          <green>47</green>
+          <blue>75</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Dark">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>116</red>
+          <green>0</green>
+          <blue>16</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Mid">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>155</red>
+          <green>0</green>
+          <blue>22</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Text">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="BrightText">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="ButtonText">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Base">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Window">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>233</red>
+          <green>0</green>
+          <blue>33</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Shadow">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="AlternateBase">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>244</red>
+          <green>127</green>
+          <blue>144</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="ToolTipBase">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>255</green>
+          <blue>220</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="ToolTipText">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </active>
+      <inactive>
+       <colorrole role="WindowText">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Button">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>233</red>
+          <green>0</green>
+          <blue>33</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Light">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>94</green>
+          <blue>117</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Midlight">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>244</red>
+          <green>47</green>
+          <blue>75</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Dark">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>116</red>
+          <green>0</green>
+          <blue>16</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Mid">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>155</red>
+          <green>0</green>
+          <blue>22</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Text">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="BrightText">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="ButtonText">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Base">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Window">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>233</red>
+          <green>0</green>
+          <blue>33</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Shadow">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="AlternateBase">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>244</red>
+          <green>127</green>
+          <blue>144</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="ToolTipBase">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>255</green>
+          <blue>220</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="ToolTipText">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </inactive>
+      <disabled>
+       <colorrole role="WindowText">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>116</red>
+          <green>0</green>
+          <blue>16</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Button">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>233</red>
+          <green>0</green>
+          <blue>33</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Light">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>94</green>
+          <blue>117</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Midlight">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>244</red>
+          <green>47</green>
+          <blue>75</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Dark">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>116</red>
+          <green>0</green>
+          <blue>16</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Mid">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>155</red>
+          <green>0</green>
+          <blue>22</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Text">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>116</red>
+          <green>0</green>
+          <blue>16</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="BrightText">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="ButtonText">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>116</red>
+          <green>0</green>
+          <blue>16</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Base">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>233</red>
+          <green>0</green>
+          <blue>33</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Window">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>233</red>
+          <green>0</green>
+          <blue>33</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Shadow">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="AlternateBase">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>233</red>
+          <green>0</green>
+          <blue>33</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="ToolTipBase">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>255</green>
+          <blue>220</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="ToolTipText">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </disabled>
+     </palette>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>* Bid prices &lt; 0.06 result in very low volatility values. Those values are set to 0.</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pbRawData">
+    <property name="geometry">
+     <rect>
+      <x>1940</x>
+      <y>200</y>
+      <width>161</width>
+      <height>46</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 228, 200); 
+border-color: rgb(9, 161, 255);</string>
+    </property>
+    <property name="text">
+     <string>Raw Data</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="laDelRow_1">
+    <property name="geometry">
+     <rect>
+      <x>2320</x>
+      <y>210</y>
+      <width>111</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Delete Row:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="laDelRow_2">
+    <property name="geometry">
+     <rect>
+      <x>2320</x>
+      <y>274</y>
+      <width>111</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Delete Row:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leDelRow_2">
+    <property name="geometry">
+     <rect>
+      <x>2430</x>
+      <y>270</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QLabel" name="laDelRow_3">
+    <property name="geometry">
+     <rect>
+      <x>2320</x>
+      <y>338</y>
+      <width>111</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Delete Row:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leDelRow_3">
+    <property name="geometry">
+     <rect>
+      <x>2430</x>
+      <y>334</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QLabel" name="laDelRow_4">
+    <property name="geometry">
+     <rect>
+      <x>2320</x>
+      <y>402</y>
+      <width>111</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Delete Row:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leDelRow_4">
+    <property name="geometry">
+     <rect>
+      <x>2430</x>
+      <y>398</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pbSpCp">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>200</y>
+      <width>351</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Filter Strike Price / Current Price</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pbBidVol">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>200</y>
+      <width>231</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Filter Bid Volitilities</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pbDeltas">
+    <property name="geometry">
+     <rect>
+      <x>960</x>
+      <y>200</y>
+      <width>171</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Filter Deltas</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leAskVolMax">
+    <property name="geometry">
+     <rect>
+      <x>880</x>
+      <y>160</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbAskVolMin">
+    <property name="geometry">
+     <rect>
+      <x>690</x>
+      <y>113</y>
+      <width>181</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Ask-Volatility Min %:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbAskVolMax">
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>163</y>
+      <width>191</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Ask-Volatility Max %:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leAskVolMin">
+    <property name="geometry">
+     <rect>
+      <x>880</x>
+      <y>110</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pbAskVol">
+    <property name="geometry">
+     <rect>
+      <x>700</x>
+      <y>200</y>
+      <width>231</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Filter Ask Volitilities</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pbAskBid">
+    <property name="geometry">
+     <rect>
+      <x>1160</x>
+      <y>200</y>
+      <width>151</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Filter Ask-Bid</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pbReload">
+    <property name="geometry">
+     <rect>
+      <x>2140</x>
+      <y>260</y>
+      <width>161</width>
+      <height>46</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 228, 200); 
+border-color: rgb(9, 161, 255);</string>
+    </property>
+    <property name="text">
+     <string>Reload Data</string>
+    </property>
+   </widget>
+   <zorder>lbExpDat2</zorder>
+   <zorder>deExpDat2</zorder>
+   <zorder>leFileName</zorder>
+   <zorder>fNameLabel</zorder>
+   <zorder>table</zorder>
+   <zorder>pbLoadFile</zorder>
+   <zorder>leDelRow_1</zorder>
+   <zorder>lbCurPri</zorder>
+   <zorder>leCurPri</zorder>
+   <zorder>rbCall</zorder>
+   <zorder>rbPut</zorder>
+   <zorder>deCurDat</zorder>
+   <zorder>lbCurDat</zorder>
+   <zorder>deExpDat1</zorder>
+   <zorder>lbExpDat1</zorder>
+   <zorder>leStrCurMin</zorder>
+   <zorder>lbStrCurMin</zorder>
+   <zorder>lbStrCurMax</zorder>
+   <zorder>leStrCurMax</zorder>
+   <zorder>lbBidVolMin</zorder>
+   <zorder>leBidVolMin</zorder>
+   <zorder>lbBidVolMax</zorder>
+   <zorder>leBidVolMax</zorder>
+   <zorder>lbDelMin</zorder>
+   <zorder>leDelMin</zorder>
+   <zorder>leDelMax</zorder>
+   <zorder>lbDelMax</zorder>
+   <zorder>leBidAsk</zorder>
+   <zorder>lbBidAsk</zorder>
+   <zorder>cbFid</zorder>
+   <zorder>cbMarWat</zorder>
+   <zorder>cbExc</zorder>
+   <zorder>line_2</zorder>
+   <zorder>line</zorder>
+   <zorder>pbClose</zorder>
+   <zorder>deExpDat3</zorder>
+   <zorder>lbExpDat3</zorder>
+   <zorder>deExpDat4</zorder>
+   <zorder>lbExpDat4</zorder>
+   <zorder>pbMatTim1</zorder>
+   <zorder>leMatTim1</zorder>
+   <zorder>pbMatTim2</zorder>
+   <zorder>leMatTim2</zorder>
+   <zorder>pbMatTim3</zorder>
+   <zorder>leMatTim3</zorder>
+   <zorder>leMatTim4</zorder>
+   <zorder>pbMatTim4</zorder>
+   <zorder>rbAll</zorder>
+   <zorder>lbBTLTC</zorder>
+   <zorder>pbRawData</zorder>
+   <zorder>laDelRow_1</zorder>
+   <zorder>laDelRow_2</zorder>
+   <zorder>leDelRow_2</zorder>
+   <zorder>laDelRow_3</zorder>
+   <zorder>leDelRow_3</zorder>
+   <zorder>laDelRow_4</zorder>
+   <zorder>leDelRow_4</zorder>
+   <zorder>pbSpCp</zorder>
+   <zorder>pbBidVol</zorder>
+   <zorder>pbDeltas</zorder>
+   <zorder>leAskVolMax</zorder>
+   <zorder>lbAskVolMin</zorder>
+   <zorder>lbAskVolMax</zorder>
+   <zorder>leAskVolMin</zorder>
+   <zorder>pbAskVol</zorder>
+   <zorder>pbAskBid</zorder>
+   <zorder>pbReload</zorder>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>2560</width>
+     <height>24</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <tabstops>
+  <tabstop>leCurPri</tabstop>
+  <tabstop>leFileName</tabstop>
+  <tabstop>leDelRow_1</tabstop>
+  <tabstop>deCurDat</tabstop>
+  <tabstop>deExpDat1</tabstop>
+  <tabstop>deExpDat2</tabstop>
+  <tabstop>deExpDat3</tabstop>
+  <tabstop>deExpDat4</tabstop>
+  <tabstop>pbMatTim1</tabstop>
+  <tabstop>leMatTim1</tabstop>
+  <tabstop>pbMatTim2</tabstop>
+  <tabstop>leMatTim2</tabstop>
+  <tabstop>pbMatTim3</tabstop>
+  <tabstop>leMatTim3</tabstop>
+  <tabstop>pbMatTim4</tabstop>
+  <tabstop>leMatTim4</tabstop>
+  <tabstop>rbCall</tabstop>
+  <tabstop>rbPut</tabstop>
+  <tabstop>cbFid</tabstop>
+  <tabstop>cbMarWat</tabstop>
+  <tabstop>cbExc</tabstop>
+  <tabstop>pbLoadFile</tabstop>
+  <tabstop>leStrCurMin</tabstop>
+  <tabstop>leStrCurMax</tabstop>
+  <tabstop>leBidVolMin</tabstop>
+  <tabstop>leBidVolMax</tabstop>
+  <tabstop>leDelMin</tabstop>
+  <tabstop>leDelMax</tabstop>
+  <tabstop>leBidAsk</tabstop>
+  <tabstop>table</tabstop>
+  <tabstop>pbClose</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>
