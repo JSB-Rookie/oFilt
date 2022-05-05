@@ -20,7 +20,7 @@ On the developer side:
 
 	git add <modified file>
 
-e.g.
+e.g. to add changes to main branch:
 
 	git add oFilt.py
 
@@ -28,11 +28,11 @@ e.g.
 
 	git commit -m "describe changes here"
 
-	git push
+	git push origin main
 
 On the user side:
 
-Ooen a Terminal, navigate to the code directory (wherever ocal is cloned), then run:
+Open a Terminal, navigate to the code directory (wherever ocal is cloned), then run:
 
 	git pull
 
