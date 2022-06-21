@@ -1,5 +1,6 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QLabel, QTableView, QMainWindow, QDateEdit
+from PyQt5.QtWidgets import QApplication, QWidget, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QLabel, QTableView, QMainWindow,\
+    QDateEdit, QMessageBox
 from PyQt5 import QtCore
 from PyQt5.QtCore import Qt
 from PyQt5 import QtWidgets, uic
@@ -9,7 +10,7 @@ import scipy.stats as stats
 import math
 from PyQt5.QtCore import QDate
 from datetime import datetime, date
-from datetime import timedelta, date
+from datetime import timedelta
 from dateutil import parser
 import webbrowser
 import subprocess
@@ -24,30 +25,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
 
-        self.pbLoadFile.clicked.connect(self.loadData)
-        
-        #Setting default dates for five calanders
-        self.deCurDat.setDate(QDate.currentDate())
-        self.deExpDat1.setDate(QDate.currentDate())
-        self.deExpDat2.setDate(QDate.currentDate())
-        self.deExpDat3.setDate(QDate.currentDate())
-        self.deExpDat4.setDate(QDate.currentDate())        
-        
         #Initializing the layouts for the MainWindow
         mainLayout = QVBoxLayout()
         horizLay1 = QHBoxLayout()
         horizLay2 = QHBoxLayout()
         horizLay3 = QHBoxLayout()
         horizLay4 = QHBoxLayout()
+
         vertLay = QVBoxLayout()
         
         horizLay1.addWidget(self.lbCurPri)
         horizLay1.addWidget(self.leCurPri)
         horizLay1.addWidget(self.fNameLabel)
         horizLay1.addWidget(self.leFileName)
-        horizLay1.addWidget(self.lbCurDat)
-        horizLay1.addWidget(self.deCurDat)
-        
         
         #Adding the four following layouts to horizLay1 Layout
         horizLay1.addLayout(mainLayout)
@@ -79,7 +69,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         horizLay3.addWidget(self.rbCall)
         horizLay3.addWidget(self.rbPut)
         horizLay3.addWidget(self.cbFid)
-        horizLay3.addWidget(self.cbMarWat)
         horizLay3.addWidget(self.cbExc)
         
         horizLay4.addWidget(self.pbSpCp)
@@ -91,42 +80,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         vertLay.addWidget(self.pbRawData)
         vertLay.addWidget(self.pbLoadFile)
         vertLay.addWidget(self.pbReload)
-        vertLay.addWidget(self.lbExpDat1)
-        vertLay.addWidget(self.deExpDat1)
-        vertLay.addWidget(self.pbMatTim1)
-        vertLay.addWidget(self.leMatTim1)
-        vertLay.addWidget(self.lbExpDat2)
-        vertLay.addWidget(self.deExpDat2)
-        vertLay.addWidget(self.pbMatTim2)
-        vertLay.addWidget(self.leMatTim2)
-        vertLay.addWidget(self.lbExpDat3)
-        vertLay.addWidget(self.deExpDat3)
-        vertLay.addWidget(self.pbMatTim3)
-        vertLay.addWidget(self.leMatTim3)
-        vertLay.addWidget(self.lbExpDat4)
-        vertLay.addWidget(self.deExpDat4)
-        vertLay.addWidget(self.pbMatTim4)
-        vertLay.addWidget(self.leMatTim4)
-        vertLay.addWidget(self.laDelRow_1)
-        vertLay.addWidget(self.leDelRow_1)
-        vertLay.addWidget(self.laDelRow_2)
-        vertLay.addWidget(self.leDelRow_2)
-        vertLay.addWidget(self.laDelRow_3)
-        vertLay.addWidget(self.leDelRow_3)
-        vertLay.addWidget(self.laDelRow_4)
-        vertLay.addWidget(self.leDelRow_4)
+        vertLay.addWidget(self.pbHiCallVol)
+        vertLay.addWidget(self.pbLoCallVol)
+        vertLay.addWidget(self.pbHiPutVol)
+        vertLay.addWidget(self.pbLoPutVol)
+        vertLay.addWidget(self.pbTightCalls)
+        vertLay.addWidget(self.pbTightPuts)
         
         mainLayout.addWidget(self.table)
         
-        self.pbMatTim1.clicked.connect(self.calc_mat_time1)
-        self.pbMatTim2.clicked.connect(self.calc_mat_time2)
-        self.pbMatTim3.clicked.connect(self.calc_mat_time3)
-        self.pbMatTim4.clicked.connect(self.calc_mat_time4)
-        
+        self.pbLoadFile.clicked.connect(self.loadData)
         self.pbClose.clicked.connect(self.close)
         self.cbFid.stateChanged.connect(self.opFid)
         self.cbExc.stateChanged.connect(self.opExl)
-        self.cbMarWat.stateChanged.connect(self.opMW)
+        self.pbRawData.clicked.connect(self.clickRaw)
         self.pbRawData.clicked.connect(self.seeAll)
         self.pbSpCp.clicked.connect(self.minMaxStrCur)
         self.pbBidVol.clicked.connect(self.minMaxBidVol)
@@ -134,54 +101,96 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pbDeltas.clicked.connect(self.minMaxDelta)
         self.pbAskBid.clicked.connect(self.maxAskMinusBid)
         self.pbReload.clicked.connect(self.reload)
+        self.pbHiCallVol.clicked.connect(self.askCallVolAsk_50)
+        self.pbLoCallVol.clicked.connect(self.bidCallVolBid_40)
+        self.pbHiPutVol.clicked.connect(self.askPutVolAsk_50)
+        self.pbLoPutVol.clicked.connect(self.bidPutVolBid_40)
+        self.pbTightCalls.clicked.connect(self.tightCalls)
+        self.pbTightPuts.clicked.connect(self.tightPuts)
+        self.leFileName.returnPressed.connect(self.addDat)
         
-        
+        self.dfR = pd.DataFrame() #Only used for Raw Data display
         self.df = pd.DataFrame()
         self.df1 = pd.DataFrame()
         self.df2 = pd.DataFrame()
         self.df3 = pd.DataFrame()
         self.df4 = pd.DataFrame()
         self.df5 = pd.DataFrame()
-        self.dfp = pd.DataFrame()
+        self.df6 = pd.DataFrame()
+        self.df7 = pd.DataFrame()
+        self.df8 = pd.DataFrame()
+        self.df9 = pd.DataFrame()
+        self.df10 = pd.DataFrame()
+        self.df11 = pd.DataFrame()
+        self.dfp = pd.DataFrame()#For the previous dataframe
         
-        self.filNum = 0
-        self.cflag = False
+        self.mTime1 = 0.0
+        self.mTime2 = 0.0
+        self.mTime3 = 0.0
+        self.mTime4 = 0.0
+
+        self.filNum = 0 #Flag to notify Table mode and widget
+        self.cflag = False #Flag to signify a copy of dataframe has been made
+        self.v = 0.10 #Volatility variable
     
     def seeAll(self):
         fileName = self.leFileName.text()
-        self.df = pd.read_csv(fileName)
-        self.df = self.df.fillna(0)
-        self.model = TableModel(self.df)
-        self.table.setModel(self.model)
-        
+        try:
+            self.dfR = pd.read_csv(fileName)
+            self.dfR = self.dfR.fillna(0)
+            self.model = TableModel(self.dfR)
+            self.table.setModel(self.model)
+        except:
+            QMessageBox.about(self, "Incorrect File Name", \
+                              "You must enter the correct file name!")
+           
+    def clickRaw(self):
+        if len(self.leFileName.text()) == 0:
+            QMessageBox.about(self, "Enter File Name", \
+                              "You must enter a file name!")
+        if len(self.leCurPri.text()) == 0:
+            QMessageBox.about(self, "Enter Current Price", \
+                              "You must enter the current price!")
+         
     def loadData(self):
         #Reading the file copied from Fidelity or MarketWatch
+        if len(self.leStrCurMax.text()) > 0 or \
+            len(self.leStrCurMin.text()) > 0 or \
+            len(self.leBidVolMin.text()) > 0 or \
+            len(self.leBidVolMax.text()) > 0 or \
+            len(self.leAskVolMin.text()) > 0 or \
+            len(self.leAskVolMax.text()) > 0 or \
+            len(self.leDelMin.text()) > 0 or \
+            len(self.leDelMax.text()) > 0 or \
+            len(self.leBidAsk.text()) > 0:
+                self.leStrCurMin.clear()
+                self.leStrCurMax.clear()
+                self.leBidVolMin.clear()
+                self.leBidVolMax.clear()
+                self.leAskVolMin.clear()
+                self.leAskVolMax.clear()
+                self.leDelMin.clear()
+                self.leDelMax.clear()
+                self.leBidAsk.clear()   
         fileName = self.leFileName.text()
-        self.df = pd.read_csv(fileName)
-        self.df = self.df.fillna(0)
-        rs = self.df.shape[0]
-        print("rs is: ", rs)
-        #Delete unwanted rows
-        if len(self.leDelRow_1.text()) > 0:
-            self.delRow()
-        if len(self.leDelRow_2.text()) > 0:
-            self.delRow_2()
-        if len(self.leDelRow_3.text()) > 0:
-            self.delRow_3()
-        if len(self.leDelRow_4.text()) > 0:
-            self.delRow_4()
+        try:
+            self.df = pd.read_csv(fileName)
+            self.df = self.df.fillna(0)
+        except:
+            QMessageBox.about(self, "Incorrect File Name", \
+                              "You must enter the correct file name!")
+                
+        self.df = self.df.rename(columns=({'Delta.1': 'Delta_1', 'Ask.1': 'Ask_1', 'Bid.1': 'Bid_1'}))
         
         #Finding number of rows - rs - and columns - cs - in the table
         rs = self.df.shape[0]
         cs = self.df.shape[1]
         
-        print("cs is: ", cs)
-        print("rs is now: ", rs)
-        
         #Drop the following columns none of which will be used in filters
         self.df.drop('Change', inplace=True, axis=1)
         self.df.drop('Volume', inplace=True, axis=1)
         self.df.drop('Open Int', inplace=True, axis=1)
+        self.df.drop('Imp Vol', inplace=True, axis=1)
         self.df.drop('Last', inplace=True, axis=1)
         self.df.drop('Action', inplace=True, axis=1)
         self.df.drop('Action.1', inplace=True, axis=1)
@@ -189,8 +198,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.df.drop('Change.1', inplace=True, axis=1)
         self.df.drop('Volume.1', inplace=True, axis=1)
         self.df.drop('Open Int.1', inplace=True, axis=1)
+        self.df.drop('Imp Vol.1', inplace=True, axis=1)
+        
+        #Making a new column for current price and fill with Current Price
+        self.df["Current"] = float(self.leCurPri.text())
         
         #Adding ExpDate column
+        rs = self.df.shape[0]
         exd = []
         for i in range(0, rs):
             exd.append("")
@@ -199,19 +213,51 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         #Create and populate column ExpDate to be Column #1
         self.df.insert(0,"ExpDate", exd)
         
+        #Determination of days from today to maturity date 
+        self.days = self.calDayDiff()
+        self.eDate1 = date.today() + timedelta(self.days)
+        print(self.eDate1)
+        
+        self.days2 = 7
+        self.days3 = 14
+        self.days4 = 21
+        
+        #Determination of actual maturity dates
+        self.eDate2 = self.eDate1 + timedelta(self.days2)
+        self.eDate3 = self.eDate1 + timedelta(self.days3)
+        self.eDate4 = self.eDate1 + timedelta(self.days4)
+        
+        index = 0
+        self.ct = 0
+        self.df['Strike'] = self.df['Strike'].replace(np.nan, 0)
+        for ind in self.df.index:
+            if self.ct == 0:
+                self.df.at[ind, 'ExpDate'] = self.eDate1
+            elif self.ct == 1:
+                self.df.at[ind, 'ExpDate'] = self.eDate2
+            elif self.ct == 2:
+                self.df.at[ind, 'ExpDate'] = self.eDate3
+            elif self.ct == 3:
+                self.df.at[ind, 'ExpDate'] = self.eDate4
+            
+            if self.df['Strike'][ind] == 0.00:
+                self.df = self.df.drop(index=ind)
+                self.ct = self.ct + 1
+                     
         #Create array to make Volatility-Bid Column for Calls and then Puts
+        rs = self.df.shape[0]
         if self.rbCall.isChecked():
             vol = []
             for i in range(0, rs):
                 vol.append("")
                 i = i +1 
-            self.df.insert(8, 'Volat-Bid', vol)
+            self.df.insert(8, 'VolatBid', vol)
         elif self.rbPut.isChecked():
             vol_p = []
             for i in range(0, rs):
                 vol_p.append("")
                 i = i +1  
-            self.df.insert(8, 'Volat-Bid.1', vol_p)
+            self.df.insert(8, 'VolatBid_1', vol_p)
             
         #Create array to make Volatility-Ask Column for Calls and then Puts 
         if self.rbCall.isChecked():
@@ -225,400 +271,430 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             for i in range(0, rs):
                 volB.append("")
                 i = i +1 
-            self.df.insert(9, 'Volat-Ask.1', volB)
-
-        #Making a new column for current price and fill with Current Price
-        self.df["Current"] = float(self.leCurPri.text())
-        
+            self.df.insert(9, 'Volat-Ask_1', volB)
+         
         #Adding Result of Strike Price divided by current price
-        self.df["Strk/Curr"] = self.df["Strike"] / self.df["Current"]
+        self.df["StrkCurr"] = self.df["Strike"] / self.df["Current"]
+        self.df['StrkCurr'] = pd.Series(["{0:.1f}%".format(val * 100) for val in self.df['StrkCurr']], index = self.df.index)
         
+          
         #Conversion of self.df[Bid] from object to float for Calls and Puts
         if self.rbCall.isChecked():
             self.df['Bid'] = self.df['Bid'].astype(float, errors = 'raise')
-            self.df["Ask-Bid"] = self.df["Ask"] - self.df["Bid"]
+            self.df["Ask-Bid"] = (self.df["Ask"] - self.df["Bid"])
+            self.df['Ask-Bid'] = pd.Series(["{0:.2f}".format(val) for val in self.df['Ask-Bid']], index = self.df.index)
         elif self.rbPut.isChecked():
-            self.df['Bid.1'] = self.df['Bid.1'].astype(float, errors = 'raise')
-            self.df["Ask.1-Bid.1"] = self.df["Ask.1"] - self.df["Bid.1"]
-            
-        #Compare ExpDate1 with the current date & If different proceed
-        #to insert the earliest expiratory date in ExpDate column
-        if (self.deExpDat1.date != self.deCurDat.date):
-            date_input = self.deExpDat1.text()
-            datetimeobject = datetime.strptime(date_input, '%d %b %Y')
-            eDate1 = datetimeobject.date()
-            #Setting first Date of ExpDate column row 0
-            self.df.loc[0, 'ExpDate'] = eDate1
-            #Moving to index first row 
-            index = 0
-            rs = self.df.shape[0]
-            if len(self.leDelRow_1.text()) > 0:
-                while index != int(self.leDelRow_1.text()):
-                    self.df.loc[index,'ExpDate'] = eDate1
-                    index = index + 1
-            else:
-                while index <= rs: 
-                    self.df.loc[index,'ExpDate'] = eDate1
-                    index = index + 1
+            self.df['Bid_1'] = self.df['Bid_1'].astype(float, errors = 'raise')
+            self.df["Ask_1-Bid_1"] = (self.df["Ask_1"] - self.df["Bid_1"])
+            self.df['Ask_1-Bid_1'] = pd.Series(["{0:.2f}".format(val) for val in self.df['Ask_1-Bid_1']], index = self.df.index)
+
         
-        #Compare ExpDate2 with the current date; If different proceed
-        #to insert the second expiratory date in ExpDate column
-        if (self.deExpDat2.date != self.deCurDat.date):
-            #Skipping Rows that have no data
-            index = index + 1
-            #Initializing date to insert for second table values
-            date_inputC = self.deCurDat.text()
-            datetimeobjectC = datetime.strptime(date_inputC, '%d %b %Y')
-            eDateC = datetimeobjectC.date()
-            #Inserting ExpDate2 to insert for second table values
-            date_input2 = self.deExpDat2.text()
-            datetimeobject2 = datetime.strptime(date_input2, '%d %b %Y')
-            eDate2 = datetimeobject2.date()
-            
-            rs = self.df.shape[0]
+        #Deletion of rows where Bid + Strike < current price
+        rs = self.df.shape[0]
+        self.df["Bid"] = self.df.Bid.astype(float)
         
-            #Moving thru 
-            if (eDate2 != eDateC): 
-                if len(self.leDelRow_2.text()) > 0:
-                    while (index != int(self.leDelRow_2.text())):
-                        self.df.loc[index,'ExpDate'] = eDate2
-                        index = index + 1
-                else:
-                    while (index != rs):
-                        self.df.loc[index,'ExpDate'] = eDate2
-                        index = index + 1
-                    self.df.loc[index,'ExpDate'] = eDate2
-                    
-        #Compare ExpDate3 with the current date; If different proceed and
-        #insert third expiratory date into ExpDate column
-        if (self.deExpDat3.date != self.deCurDat.date):
-            #Skipping Rows that have no data
-            index = index + 1
-            #Initializing date to insert for third table values
-            date_inputC = self.deCurDat.text()
-            datetimeobjectC = datetime.strptime(date_inputC, '%d %b %Y')
-            eDateC = datetimeobjectC.date()
-            #Inserting ExpDate2 to insert for third table values
-            date_input3 = self.deExpDat3.text()
-            datetimeobject3 = datetime.strptime(date_input3, '%d %b %Y')
-            eDate3 = datetimeobject3.date()
-            
-            rs = self.df.shape[0]
+        #The below code will discard Delta values of '--' and create a new dataframe - NOT A COPY
+        self.df = self.df.loc[self.df['Delta'] != '--']
+        self.df = self.df.loc[self.df['Delta'] != -1]
         
-            #Moving thru 
-            if (eDate3 != eDateC): 
-                if len(self.leDelRow_3.text()) > 0:
-                    while (index != int(self.leDelRow_3.text())):
-                        self.df.loc[index,'ExpDate'] = eDate3
-                        index = index + 1
-                else:
-                    while (index != rs):
-                        self.df.loc[index,'ExpDate'] = eDate3
-                        index = index + 1
-                    self.df.loc[index,'ExpDate'] = eDate3
-                    
-        #Compare ExpDate4 with the current date; If different proceed and
-        #insert fourth expiratory date into ExpDate column
-        if (self.deExpDat4.date != self.deCurDat.date):
-             #Skipping Rows that have no data
-             index = index + 1
-             #Initializing date to insert for third table values
-             date_inputC = self.deCurDat.text()
-             datetimeobjectC = datetime.strptime(date_inputC, '%d %b %Y')
-             eDateC = datetimeobjectC.date()
-             #Inserting ExpDate2 to insert for third table values
-             date_input4 = self.deExpDat4.text()
-             datetimeobject4 = datetime.strptime(date_input4, '%d %b %Y')
-             eDate4 = datetimeobject4.date()
-             
-             rs = self.df.shape[0]
-         
-             #Moving thru 
-             if (eDate4 != eDateC): 
-                 if len(self.leDelRow_4.text()) > 0:
-                     while (index != int(self.leDelRow_4.text())):
-                         self.df.loc[index,'ExpDate'] = eDate4
-                         index = index + 1
-                 else:
-                     while (index != rs):
-                         self.df.loc[index,'ExpDate'] = eDate4
-                         index = index + 1
-                     self.df.loc[index,'ExpDate'] = eDate4
         
-        #integers representing rows to be deleted
-        dr1 = 0 
-        dr2 = 0
-        dr3 = 0
-        dr4 = 0
+        self.df['Delta_1'] = self.df.Delta_1.astype(float)
+        self.df['Delta'] = self.df.Delta.astype(float)
+        #print("289 self.df.index is before drop: ", self.df.index)
+        self.df.reset_index(inplace = True, drop = True)
+        #print("291 self.df.index is after drop: ", self.df.index)
         
-        #Getting the values from the deleted row line edits 
-        if len(self.leDelRow_1.text()) > 0:
-            dr1 = int(self.leDelRow_1.text())
-        if len(self.leDelRow_2.text()) > 0:
-            dr2 = int(self.leDelRow_2.text())
-        if len(self.leDelRow_3.text()) > 0:
-            dr3 = int(self.leDelRow_3.text())
-        if len(self.leDelRow_4.text()) > 0:
-            dr4 = int(self.leDelRow_4.text())
+        self.df['Bid'] = self.df.Bid.astype(float)
+        self.df['Ask'] = self.df.Ask.astype(float)
         
-        dataTypeSeries = self.df.dtypes
-        print(dataTypeSeries)
         
-        #Making a copy of df which is only a copy and any changes to the copied
-        #file, will not change the original dataframe(df)
-        self.df1 = self.df.copy()
+        #dataframe[‘column_name’].loc[dataframe.index[row_number]]
+        bnum = self.df.columns.get_loc("Bid")
+        snum = self.df.columns.get_loc("Strike")
+        cnum = self.df.columns.get_loc("Current")
+        print("Bid num is: ", bnum)
+        print("Strike num is: ", snum)
+        print("Current price is: ", cnum)
         
+        rs = self.df.shape[0]
+    
+        #Using integers x, y, and z to drop rows with Bid + Strike <
+        #Current price
+        x = 0.0
+        y = 0.0
+        z = 0.0
+        
+        for ind in self.df.index:
+            x = float(self.df['Bid'][ind])
+            y = float(self.df['Strike'][ind])
+            z = float(self.df['Current'][ind])
+
+        #Remove rows with Bid + Strike < Current price
+        for ind in self.df.index:
+            if (x + y) < z:
+                self.df = self.df.drop(self.df.index[ind]) 
+                rs = rs - 1
+              
+        rs = self.df.shape[0]
+        self.df.reset_index(inplace = True, drop = True)
+        
+                
         #Creating table to accomdate Calls    
         if self.rbCall.isChecked():
             self.filNum = self.filNum + 1
-            self.df1.drop('Bid.1', inplace=True, axis=1)
-            self.df1.drop('Ask.1', inplace=True, axis=1)
-            self.df1.drop('Delta.1', inplace=True, axis=1)
-            self.df1.drop('Imp Vol.1', inplace=True, axis=1)
+            self.df.drop('Bid_1', inplace=True, axis=1)
+            self.df.drop('Ask_1', inplace=True, axis=1)
+            self.df.drop('Delta_1', inplace=True, axis=1)
         #Creating table to accomdate Puts        
         elif self.rbPut.isChecked():
             self.filNum = self.filNum + 1
-            self.df1.drop('Bid', inplace=True, axis=1)
-            self.df1.drop('Ask', inplace=True, axis=1)
-            self.df1.drop('Delta', inplace=True, axis=1)
-            self.df1.drop('Imp Vol', inplace=True, axis=1)
+            self.df.drop('Bid', inplace=True, axis=1)
+            self.df.drop('Ask', inplace=True, axis=1)
+            self.df.drop('Delta', inplace=True, axis=1)
+            
+        self.df.reset_index(inplace = True, drop = True)
                          
         #Calculation of expected call bid volatility
         if (len(self.leBidVolMin.text()) == 0 and (len(self.leBidVolMax.text())) == 0) \
             and (self.rbCall.isChecked()):
             index = 0 
-            for index, row in self.df1.iterrows():
-                if (index != 0) and ((dr1 == index) or (dr2 == index) or \
-                                     (dr3 == index) or (dr4 == index)): 
-                    index = index + 1
-                        
-                premK = float(self.df1.loc[index, 'Bid'])
+            for index, row in self.df.iterrows():
+                premK = float(self.df.loc[index, 'Bid'])
                 premUK = 0.07
-                v = 0.10
                 vF = 0.0
+                self.v = 0.05
+                S = float(self.leCurPri.text())
                 while (premUK < premK):
                     #Calculations on options with a very low premium don't give a significant answer
-                    S = float(self.leCurPri.text())
-                    K = float(self.df1.loc[index, 'Strike'])
-                    r = 0.005
+                    K = float(self.df.loc[index, 'Strike'])
+                    r = 1.5
                     r = r / 100
-                    v = v + .001
-                    t = self.matTime()
-                    d1_numerator = np.log(S/K) + (r + ((v * v)/2)) * t
-                    d1_denominator = v * math.sqrt(t)
+                    t = self.matTime(index)
+                    self.v = self.v + .05
+                    d1_numerator = np.log(S/K) + (r + ((self.v * self.v)/2)) * t
+                    d1_denominator = self.v * math.sqrt(t)
                     d1 = d1_numerator/d1_denominator
-                    d2 = d1 - v * math.sqrt(t)
+                    d2 = d1 - self.v * math.sqrt(t)
                     x = d1
                     firstFactor = S * stats.norm.cdf(x)
                     secondFactor = K * math.exp(-r*t) * stats.norm.cdf(d2)
                     premium = firstFactor - secondFactor
                     premUK = premium
-                    vF = int(v * 100)
-                    vF = format(vF, ".2f")
-                    vF = float(v * 100)
-                    vF = round(vF, 2)
-                    rs = self.df1.shape[0]
                     
-                self.df1.loc[index, 'Volat-Bid'] = (str(vF) + "%")
+                premUK = 0.07    
+                self.v = self.v - .05
+                while(premUK < premK):
+                    K = float(self.df.loc[index, 'Strike'])
+                    r = 1.5
+                    r = r / 100
+                    self.v = self.v + 0.001
+                    t = self.matTime(index)
+                    d1_numerator = np.log(S/K) + (r + ((self.v * self.v)/2)) * t
+                    d1_denominator = self.v * math.sqrt(t)
+                    d1 = d1_numerator/d1_denominator
+                    d2 = d1 - self.v * math.sqrt(t)
+                    x = d1
+                    firstFactor = S * stats.norm.cdf(x)
+                    secondFactor = K * math.exp(-r*t) * stats.norm.cdf(d2)
+                    premium = firstFactor - secondFactor
+                    premUK = premium
+                    
+                vF = int(self.v * 100)
+                vF = format(vF, ".2f")
+                vF = float(self.v * 100)
+                vF = round(vF, 2)
+                rs = self.df.shape[0]
+                self.df.loc[index, 'VolatBid'] = (str(vF) + "%")
+                index = index + 1
                 
         #Calculation of expected call Ask volatility
         if (len(self.leAskVolMin.text()) == 0 and (len(self.leAskVolMax.text())) == 0) \
              and (self.rbCall.isChecked()):
              index = 0 
-             for index, row in self.df1.iterrows():
-                 if (index != 0) and ((dr1 == index) or (dr2 == index) or \
-                                      (dr3 == index) or (dr4 == index)): 
-                     index = index + 1
-                         
-                 premK = float(self.df1.loc[index, 'Ask'])
+             for index, row in self.df.iterrows():
+                 premK = float(self.df.loc[index, 'Ask'])
                  premUK = 0.07
-                 v = 0.10
                  vF = 0.0
+                 self.v = 0.05
+                 S = float(self.leCurPri.text())
                  while (premUK < premK):
                      #Calculations on options with a very low premium don't give a significant answer
-                     S = float(self.leCurPri.text())
-                     K = float(self.df1.loc[index, 'Strike'])
-                     r = 0.005
+                     K = float(self.df.loc[index, 'Strike'])
+                     r = 1.5
                      r = r / 100
-                     v = v + .001
-                     t = self.matTime()
-                     d1_numerator = np.log(S/K) + (r + ((v * v)/2)) * t
-                     d1_denominator = v * math.sqrt(t)
+                     self.v = self.v + .05
+                     t = self.matTime(index)
+                     d1_numerator = np.log(S/K) + (r + ((self.v * self.v)/2)) * t
+                     d1_denominator = self.v * math.sqrt(t)
                      d1 = d1_numerator/d1_denominator
-                     d2 = d1 - v * math.sqrt(t)
+                     d2 = d1 - self.v * math.sqrt(t)
                      x = d1
                      firstFactor = S * stats.norm.cdf(x)
                      secondFactor = K * math.exp(-r*t) * stats.norm.cdf(d2)
                      premium = firstFactor - secondFactor
                      premUK = premium
-                     vF = int(v * 100)
-                     vF = format(vF, ".2f")
-                     vF = float(v * 100)
-                     vF = round(vF, 2)
-                     rs = self.df1.shape[0]
+                    
+                 premUK = 0.07    
+                 self.v = self.v - .05
+                 while (premUK < premK):
+                     #Calculations on options with a very low premium don't give a significant answer
+                     K = float(self.df.loc[index, 'Strike'])
+                     r = 1.5
+                     r = r / 100
+                     self.v = self.v + 0.001
+                     t = self.matTime(index)
+                     d1_numerator = np.log(S/K) + (r + ((self.v * self.v)/2)) * t
+                     d1_denominator = self.v * math.sqrt(t)
+                     d1 = d1_numerator/d1_denominator
+                     d2 = d1 - self.v * math.sqrt(t)
+                     x = d1
+                     firstFactor = S * stats.norm.cdf(x)
+                     secondFactor = K * math.exp(-r*t) * stats.norm.cdf(d2)
+                     premium = firstFactor - secondFactor
+                     premUK = premium
                      
-                 self.df1.loc[index, 'Volat-Ask'] = (str(vF) + "%")
-
-        #calculation of Bid volatilities for Puts
+                 vF = int(self.v * 100)
+                 vF = format(vF, ".2f")
+                 vF = float(self.v * 100)
+                 vF = round(vF, 2)
+                 rs = self.df.shape[0]
+                 self.df.loc[index, 'Volat-Ask'] = (str(vF) + "%")
+                 index = index + 1
+                 
+                 
+         #calculation of Bid volatilities for Puts
         if (len(self.leBidVolMin.text()) == 0 and (len(self.leBidVolMax.text())) == 0) \
             and (self.rbPut.isChecked()):
-                index = 0 
-                for index, row in self.df1.iterrows():
-                    if (index != 0) and ((dr1 == index) or (dr2 == index) or \
-                                         (dr3 == index) or (dr4 == index)): 
-                        index = index + 1
-                            
-                    premK = float(self.df1.loc[index, 'Bid.1'])
-                    premUK = 0.07
-                    v = 0.10
-                    vF = 0.0
-                    while (premUK < premK):
-                        #Calculations on options with a very low premium don't give a significant answer
-                        S = float(self.leCurPri.text())
-                        K = float(self.df1.loc[index, 'Strike'])
-                        r = 0.005
-                        r = r / 100
-                        v = v + .001
-                        t = self.matTime()
-                        d1_numerator = np.log(S/K) + (r + ((v * v)/2)) * t
-                        d1_denominator = v * math.sqrt(t)
-                        d1 = d1_numerator/d1_denominator
-                        d2 = d1 - v * math.sqrt(t)
-                        x = -d2
-                        y = -d1
-                        factorOne = stats.norm.cdf(x) * K * math.exp(-r*t) 
-                        factorTwo = stats.norm.cdf(y) * S
-                        premiumP = factorOne - factorTwo
-                        premUK = premiumP
-                        vF = int(v * 100)
-                        vF = format(vF, ".2f")
-                        vF = float(v * 100)
-                        vF = round(vF, 2)
-                        rs = self.df.shape[0]
-                        
-                    self.df1.loc[index, 'Volat-Bid.1'] = (str(vF) + "%")
-        
-        
+            index = 0 
+            for index, row in self.df.iterrows():
+                premK = float(self.df.loc[index, 'Bid_1'])
+                premUK = 0.07
+                self.v = 0.05
+                vF = 0.0
+                S = float(self.leCurPri.text())
+                while (premUK < premK):
+                    #Calculations on options with a very low premium don't give a significant answer
+                    K = float(self.df.loc[index, 'Strike'])
+                    r = 1.5
+                    r = r / 100
+                    self.v = self.v + .05
+                    t = self.matTime(index)
+                    d1_numerator = np.log(S/K) + (r + ((self.v * self.v)/2)) * t
+                    d1_denominator = self.v * math.sqrt(t)
+                    d1 = d1_numerator/d1_denominator
+                    d2 = d1 - self.v * math.sqrt(t)
+                    x = -d2
+                    y = -d1
+                    factorOne = stats.norm.cdf(x) * K * math.exp(-r*t) 
+                    factorTwo = stats.norm.cdf(y) * S
+                    premiumP = factorOne - factorTwo
+                    premUK = premiumP
+                   
+                vF = 0.0
+                premUK = 0.07    
+                self.v = self.v - .05
+                while (premUK < premK):
+                    #Calculations on options with a very low premium don't give a significant answer
+                    S = float(self.leCurPri.text())
+                    K = float(self.df.loc[index, 'Strike'])
+                    r = 0.005
+                    r = r / 100
+                    self.v = self.v + 0.001
+                    t = self.matTime(index)
+                    d1_numerator = np.log(S/K) + (r + ((self.v * self.v)/2)) * t
+                    d1_denominator = self.v * math.sqrt(t)
+                    d1 = d1_numerator/d1_denominator
+                    d2 = d1 - self.v * math.sqrt(t)
+                    x = -d2
+                    y = -d1
+                    factorOne = stats.norm.cdf(x) * K * math.exp(-r*t) 
+                    factorTwo = stats.norm.cdf(y) * S
+                    premiumP = factorOne - factorTwo
+                    premUK = premiumP
+   
+                vF = int(self.v * 100)
+                vF = format(vF, ".2f")
+                vF = float(self.v * 100)
+                vF = round(vF, 2)
+                rs = self.df.shape[0]
+                   
+                self.df.loc[index, 'VolatBid_1'] = (str(vF) + "%")
+                
+   
         #calculation of Ask volatilities for Puts
         if (len(self.leAskVolMin.text()) == 0 and (len(self.leAskVolMax.text())) == 0) \
             and (self.rbPut.isChecked()):
                 index = 0 
-                for index, row in self.df1.iterrows():
-                    if (index != 0) and ((dr1 == index) or (dr2 == index) or \
-                                         (dr3 == index) or (dr4 == index)): 
-                        index = index + 1
-                            
-                    premK = float(self.df1.loc[index, 'Ask.1'])
+                for index, row in self.df.iterrows():
+                    premK = float(self.df.loc[index, 'Ask_1'])
                     premUK = 0.07
-                    v = 0.10
+                    self.v = 0.05
                     vF = 0.0
                     while (premUK < premK):
                         #Calculations on options with a very low premium don't give a significant answer
                         S = float(self.leCurPri.text())
-                        K = float(self.df1.loc[index, 'Strike'])
+                        K = float(self.df.loc[index, 'Strike'])
                         r = 0.005
                         r = r / 100
-                        v = v + .001
-                        t = self.matTime()
-                        d1_numerator = np.log(S/K) + (r + ((v * v)/2)) * t
-                        d1_denominator = v * math.sqrt(t)
+                        self.v = self.v + .05
+                        t = self.matTime(index)
+                        d1_numerator = np.log(S/K) + (r + ((self.v * self.v)/2)) * t
+                        d1_denominator = self.v * math.sqrt(t)
                         d1 = d1_numerator/d1_denominator
-                        d2 = d1 - v * math.sqrt(t)
+                        d2 = d1 - self.v * math.sqrt(t)
                         x = -d2
                         y = -d1
                         factorOne = stats.norm.cdf(x) * K * math.exp(-r*t) 
                         factorTwo = stats.norm.cdf(y) * S
                         premiumP = factorOne - factorTwo
                         premUK = premiumP
-                        vF = int(v * 100)
-                        vF = format(vF, ".2f")
-                        vF = float(v * 100)
-                        vF = round(vF, 2)
-                        rs = self.df.shape[0]
-                        
-                    self.df1.loc[index, 'Volat-Ask.1'] = (str(vF) + "%")
+                            
+                    premUK = 0.07
+                    self.v = self.v - .05
+                    vF = 0.0
+                    while (premUK < premK):
+                        #Calculations on options with a very low premium don't give a significant answer
+                        S = float(self.leCurPri.text())
+                        K = float(self.df.loc[index, 'Strike'])
+                        r = 0.005
+                        r = r / 100
+                        self.v = self.v + 0.001
+                        t = self.matTime(index)
+                        d1_numerator = np.log(S/K) + (r + ((self.v * self.v)/2)) * t
+                        d1_denominator = self.v * math.sqrt(t)
+                        d1 = d1_numerator/d1_denominator
+                        d2 = d1 - self.v * math.sqrt(t)
+                        x = -d2
+                        y = -d1
+                        factorOne = stats.norm.cdf(x) * K * math.exp(-r*t) 
+                        factorTwo = stats.norm.cdf(y) * S
+                        premiumP = factorOne - factorTwo
+                        premUK = premiumP
 
+                    
+                    vF = int(self.v * 100)
+                    vF = format(vF, ".2f")
+                    vF = float(self.v * 100)
+                    vF = round(vF, 2)
+                    rs = self.df.shape[0]
+                        
+                    self.df.loc[index, 'Volat-Ask_1'] = (str(vF) + "%")
+          
+        #Drop string '0.0%' from VolatBid in order to delete Bid < 0.1% AND Ask < 0.1 
+        #all of which in the same row  
+        if self.rbCall.isChecked():          
+            self.df = self.df.loc[self.df['VolatBid'] != '0.0%']
+            self.df.reset_index(inplace = True, drop = True)
+            self.df = self.df.loc[self.df['Volat-Ask'] != '0.0%']
+            self.df.reset_index(inplace = True, drop = True)
+            
+        #Drop string '0.0%' from VolatBid-1 in order to delete Bid < 0.1% AND Ask < 0.1 
+        #all of which in the same row 
+        if self.rbPut.isChecked():          
+            self.df = self.df.loc[self.df['Volat-Ask_1'] != '0.0%']
+            self.df.reset_index(inplace = True, drop = True)
+            self.df = self.df.loc[self.df['VolatBid_1'] != '0.0%']
+            self.df.reset_index(inplace = True, drop = True)
+    
         #Determining which dataframe will be shown.
         if self.filNum > 0:
-            self.model = TableModel(self.df1)
+            self.df = self.df.dropna()
+            self.model = TableModel(self.df)
             self.table.setModel(self.model) 
         else:
+            self.df = self.df.dropna()
             self.model = TableModel(self.df)
-            self.table.setModel(self.model)  
+            self.table.setModel(self.model) 
+        
+        result = self.df.dtypes
+        print(result)
+        
+    def calDayDiff(self):
+        if ((datetime.today().weekday()) == 0):
+            daydiff = 4
+        elif((datetime.today().weekday()) == 1):
+            daydiff = 3
+        elif((datetime.today().weekday()) == 2):
+            daydiff = 2
+        elif((datetime.today().weekday()) == 3):
+            daydiff = 1
+        elif((datetime.today().weekday()) == 4):
+            daydiff = 7
+        elif((datetime.today().weekday()) == 5):
+            daydiff = 6
+        elif((datetime.today().weekday()) == 6):
+            daydiff = 5
+
+        return daydiff
+
         
     def calc_mat_time1(self):
-        d1 = datetime.now().date()
-        date_input = self.deExpDat1.text()
-        datetimeobject = datetime.strptime(date_input, '%d %b %Y')
-        d2 = datetimeobject.date()
-        delta = d2 - d1
-        matTime = delta.days / 365.25
-        self.leMatTim1.setFocus()
-        self.leMatTim1.setText(str("{:.4f}".format(matTime)))
-        
+        self.mTime1 = self.calDayDiff() / 365.25
+        return self.mTime1
+       
     def calc_mat_time2(self):
-        d1 = datetime.now().date()
-        date_input = self.deExpDat2.text()
-        datetimeobject = datetime.strptime(date_input, '%d %b %Y')
-        d2 = datetimeobject.date()
-        delta = d2 - d1
-        matTime = delta.days / 365.25
-        self.leMatTim2.setFocus()
-        self.leMatTim2.setText(str("{:.4f}".format(matTime)))
+        self.mTime2 = (self.calDayDiff() + 7) / 365.25
+        return self.mTime2
         
     def calc_mat_time3(self):
-        d1 = datetime.now().date()
-        date_input = self.deExpDat3.text()
-        datetimeobject = datetime.strptime(date_input, '%d %b %Y')
-        d2 = datetimeobject.date()
-        delta = d2 - d1
-        matTime = delta.days / 365.25
-        self.leMatTim3.setFocus()
-        self.leMatTim3.setText(str("{:.4f}".format(matTime)))
+        self.mTime3 = (self.calDayDiff() + 14) / 365.25
+        return self.mTime3
         
     def calc_mat_time4(self):
-        d1 = datetime.now().date()
-        date_input = self.deExpDat4.text()
-        datetimeobject = datetime.strptime(date_input, '%d %b %Y')
-        d2 = datetimeobject.date()
-        delta = d2 - d1
-        matTime = delta.days / 365.25
-        self.leMatTim4.setFocus()
-        self.leMatTim4.setText(str("{:.4f}".format(matTime)))
-        
+        self.mTime4 = (self.calDayDiff() + 21) / 365.25
+        return self.mTime4
+    
     def minMaxStrCur(self):
         if self.cflag == True:
             self.df1 = self.dfp.copy()
         elif self.cflag == False:
-            self.df1 = self.df1.copy()
-            #Because cflag is false df1 will be the dataframe used here
-            #If another filter had been used first dfp would have been 
-            #created at the end of the filter query and then copied to df1 here
-            #dfp stands for "dataframe previous" and cflag is for "copy flag"           
-            
+            self.df1 = self.df.copy()
+        rs = self.df1.shape[0]
+            #dfp stands for "dataframe previous" and cflag is for "copy flag";
+            #Subsequently self.df is being used and is always altering the
+            #original df dataframe. Copies not made yet.
+         
         if (len(self.leStrCurMin.text()) > 0 and (len(self.leStrCurMax.text())) > 0) \
             and (self.rbCall.isChecked()):
             self.filNum = self.filNum + 1
+            #Change values in StrkCurr from percentages to floats
+            self.df1['StrkCurr'] = self.df1['StrkCurr'].str.rstrip("%").astype('float')
+            
+            #Filter done using floats
             scMin = self.leStrCurMin.text()
             scMax = self.leStrCurMax.text()
-            self.df1 = (self.df1.loc[self.df1['Strk/Curr'] >= float(scMin)]) 
-            self.df1 = (self.df1.loc[self.df1["Strk/Curr"] <= float(scMax)])
-            self.df1 = self.df1.sort_values(by = 'Strk/Curr')
+            self.df1 = (self.df1.loc[self.df1['StrkCurr'] >= float(scMin)]) 
+            self.df1 = (self.df1.loc[self.df1["StrkCurr"] <= float(scMax)])
+            self.df1 = self.df1.sort_values(by = 'StrkCurr')
+            
+            #Strings returned to Strkurr will now be converted to floats, then to percentages
+            self.df1["StrkCurr"] = pd.to_numeric(self.df1["StrkCurr"], downcast="float")
+            self.df1['StrkCurr'] = pd.Series(["{0:.1f}%".format(val) for val in self.df1['StrkCurr']], index = self.df1.index)
+                        
             self.model = TableModel(self.df1)
             self.table.setModel(self.model) 
-        if (len(self.leStrCurMin.text()) > 0 and (len(self.leStrCurMax.text())) > 0) \
+
+        elif (len(self.leStrCurMin.text()) > 0 and (len(self.leStrCurMax.text())) > 0) \
             and (self.rbPut.isChecked()):
             self.filNum = self.filNum + 1
-            #Get results from StrikePrice/CurrentPrice Minium
+            #Change values in StrkCurr from percentages to floats
+            self.df1['StrkCurr'] = self.df1['StrkCurr'].str.rstrip("%").astype('float')
+            
+            #Filter done using floats
             scMin = self.leStrCurMin.text()
-            self.df1 = self.df1.loc[self.df1['Strk/Curr'] >= float(scMin)]
-            #Get results from StrikePrice/CurrentPrice Maximum
             scMax = self.leStrCurMax.text()
-            self.df1 = self.df1.loc[self.df1["Strk/Curr"] <= float(scMax)]
-            self.df1 = self.df1.sort_values(by = 'Strk/Curr')
+            self.df1 = (self.df1.loc[self.df1['StrkCurr'] >= float(scMin)]) 
+            self.df1 = (self.df1.loc[self.df1["StrkCurr"] <= float(scMax)])
+            self.df1 = self.df1.sort_values(by = 'StrkCurr')
+            
+            #Strings returned to Strkurr will now be converted to floats, then to percentages
+            self.df1["StrkCurr"] = pd.to_numeric(self.df1["StrkCurr"], downcast="float")
+            self.df1['StrkCurr'] = pd.Series(["{0:.1f}%".format(val) for val in self.df1['StrkCurr']], index = self.df1.index)
+                        
             self.model = TableModel(self.df1)
             self.table.setModel(self.model) 
             
+        #Create 'dataframe past' or dfp fo future filters to use    
         self.dfp = self.df1.copy() 
         self.cflag = True
         
@@ -626,92 +702,235 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.cflag == True:
             self.df2 = self.dfp.copy()
         else:
-            self.df2 = self.df1.copy()
-        
+            self.df2 = self.df.copy()
+            
         if (len(self.leBidVolMin.text()) > 0 and (len(self.leBidVolMax.text())) > 0) \
             and self.rbCall.isChecked():
             self.filNum = self.filNum + 1
-            #Get results from Volat-Bib Minium
+            
+            #Change values in VolatBid from percentages to floats
+            self.df2['VolatBid'] = self.df2['VolatBid'].str.rstrip("%").astype('float')
+            
+            #Filter done using floats
             volMin = self.leBidVolMin.text()
-            volMin = float(volMin)
-            #Get results from Volat-Bib Maximum
             volMax = self.leBidVolMax.text()
-            volMax = float(volMax)
-            #Convert percent values to floats in Volat-Bid
-            self.df2['Volat-Bid'] = self.df2['Volat-Bid'].str.rstrip("%").astype(float)
-            self.df2 = self.df2.loc[self.df2['Volat-Bid'] >= float(volMin)]
-            self.df2 = self.df2.loc[self.df2['Volat-Bid'] <= float(volMax)]
-            self.df2 = self.df2.sort_values(by = 'Volat-Bid')
+            self.df2 = (self.df2.loc[self.df2['VolatBid'] >= float(volMin)]) 
+            self.df2 = (self.df2.loc[self.df2["VolatBid"] <= float(volMax)])
+            self.df2 = self.df2.sort_values(by = 'VolatBid')
+                                            
+            #Strings returned to VolatBid will now be converted to floats, then to percentages
+            self.df2["VolatBid"] = pd.to_numeric(self.df2["VolatBid"], downcast="float")
+            self.df2['VolatBid'] = pd.Series(["{0:.1f}%".format(val) for val in self.df2['VolatBid']], index = self.df2.index)
+            
             self.model = TableModel(self.df2)
             self.table.setModel(self.model) 
+           
         elif (len(self.leBidVolMin.text()) > 0 and (len(self.leBidVolMax.text())) > 0) \
             and self.rbPut.isChecked():
             self.filNum = self.filNum + 1
-            #Get results from Volat-Bib Minium
+            
+            #Change values in VolatBid_1 from percentages to floats
+            self.df2['VolatBid_1'] = self.df2['VolatBid_1'].str.rstrip("%").astype('float')
+            
+            #Filter done using floats
             volMin = self.leBidVolMin.text()
-            volMin = float(volMin)
-            #Get results from Volat-Bib Maximum
             volMax = self.leBidVolMax.text()
-            volMax = float(volMax)
-            #Convert percent values to floats in Volat-Bid
-            self.df2['Volat-Bid.1'] = self.df2['Volat-Bid.1'].str.rstrip("%").astype(float)
-            self.df2 = self.df2.loc[self.df2['Volat-Bid.1'] >= float(volMin)]
-            self.df2 = self.df2.loc[self.df2['Volat-Bid.1'] <= float(volMax)]
-            self.df2 = self.df2.sort_values(by = 'Volat-Bid.1')
+            self.df2 = (self.df2.loc[self.df2['VolatBid_1'] >= float(volMin)]) 
+            self.df2 = (self.df2.loc[self.df2["VolatBid_1"] <= float(volMax)])
+            self.df2 = self.df2.sort_values(by = 'VolatBid_1')
+            
+            #Strings returned to VolatBid will now be converted to floats, then to percentages
+            self.df2["VolatBid_1"] = pd.to_numeric(self.df2["VolatBid_1"], downcast="float")
+            self.df2['VolatBid_1'] = pd.Series(["{0:.1f}%".format(val) for val in self.df2['VolatBid_1']], index = self.df2.index)
+                                            
             self.model = TableModel(self.df2)
             self.table.setModel(self.model) 
             
         self.dfp = self.df2.copy()
         self.cflag = True
         
+    def askCallVolAsk_50(self):
+        if self.rbCall.isChecked():
+            self.df7 = self.df.copy()
+            self.filNum = self.filNum + 1
             
+            #Change values in Volat-Ask from percentages to floats
+            self.df7['Volat-Ask'] = self.df7['Volat-Ask'].str.rstrip("%").astype('float')
+            
+            #Filter done using floats
+            volMin = 50.0
+            self.df7 = (self.df7.loc[self.df7['Volat-Ask'] >= float(volMin)]) 
+            self.df7 = self.df7.sort_values(by = 'Volat-Ask')
+            
+            #Strings returned to VolatAsk will now be converted to floats, then to percentages
+            self.df7["Volat-Ask"] = pd.to_numeric(self.df7["Volat-Ask"], downcast="float")
+            self.df7['Volat-Ask'] = pd.Series(["{0:.1f}%".format(val) for val in self.df7['Volat-Ask']], index = self.df7.index)
+            
+            self.df7.reset_index(inplace = True, drop = True)
+            
+            self.model = TableModel(self.df7)
+            self.table.setModel(self.model)
+            
+    def bidCallVolBid_40(self):
+        if self.rbCall.isChecked():
+            self.df8 = self.df.copy()
+            self.filNum = self.filNum + 1
+            
+            #Change values in Volat-Ask from percentages to floats
+            self.df8['VolatBid'] = self.df8['VolatBid'].str.rstrip("%").astype('float')
+            
+            #Filter done using floats
+            volMax = 40.0
+            self.df8 = (self.df8.loc[self.df8['VolatBid'] <= float(volMax)]) 
+            self.df8 = self.df8.sort_values(by = 'VolatBid')
+            
+            #Strings returned to VolatAsk will now be converted to floats, then to percentages
+            self.df8["VolatBid"] = pd.to_numeric(self.df8["VolatBid"], downcast="float")
+            self.df8['VolatBid'] = pd.Series(["{0:.1f}%".format(val) for val in self.df8['VolatBid']], index = self.df8.index)
+            
+            self.df8.reset_index(inplace = True, drop = True)
+            
+            self.model = TableModel(self.df8)
+            self.table.setModel(self.model)
+            
+    def askPutVolAsk_50(self):
+        if self.rbPut.isChecked():
+            self.df9 = self.df.copy()
+            self.filNum = self.filNum + 1
+            
+            #Change values in Volat-Ask from percentages to floats
+            self.df9['Volat-Ask_1'] = self.df9['Volat-Ask_1'].str.rstrip("%").astype('float')
+            
+            #Filter done using floats
+            volMin = 50.0
+            self.df9 = (self.df9.loc[self.df9['Volat-Ask_1'] >= float(volMin)]) 
+            self.df9 = self.df9.sort_values(by = 'Volat-Ask_1')
+            
+            #Strings returned to VolatAsk will now be converted to floats, then to percentages
+            self.df9["Volat-Ask_1"] = pd.to_numeric(self.df9["Volat-Ask_1"], downcast="float")
+            self.df9['Volat-Ask_1'] = pd.Series(["{0:.1f}%".format(val) for val in self.df9['Volat-Ask_1']], index = self.df9.index)
+            
+            self.df9.reset_index(inplace = True, drop = True)
+            
+            self.model = TableModel(self.df9)
+            self.table.setModel(self.model)
+            
+    def bidPutVolBid_40(self):
+        if self.rbPut.isChecked():
+            self.df10 = self.df.copy()
+            self.filNum = self.filNum + 1
+            
+            #Change values in Volat-Ask from percentages to floats
+            self.df10['VolatBid_1'] = self.df10['VolatBid_1'].str.rstrip("%").astype('float')
+            
+            #Filter done using floats
+            volMax = 40.0
+            self.df10 = (self.df10.loc[self.df10['VolatBid_1'] <= float(volMax)]) 
+            self.df10 = self.df10.sort_values(by = 'VolatBid_1')
+            
+            #Strings returned to VolatAsk will now be converted to floats, then to percentages
+            self.df10["VolatBid_1"] = pd.to_numeric(self.df10["VolatBid_1"], downcast="float")
+            self.df10['VolatBid_1'] = pd.Series(["{0:.1f}%".format(val) for val in self.df10['VolatBid_1']], index = self.df10.index)
+            
+            self.df10.reset_index(inplace = True, drop = True)
+            
+            self.model = TableModel(self.df10)
+            self.table.setModel(self.model)
+            
+    def tightCalls(self):
+        if self.rbCall.isChecked():
+            self.df11 = self.df.copy()
+            self.filNum = self.filNum + 1
+            
+            valMax = 1.0
+            self.df11['Ask-Bid'] = self.df11['Ask-Bid'].astype(float)
+            self.df11 = (self.df11.loc[self.df11['Ask-Bid'] <= float(valMax)])
+            self.df11 = self.df11.sort_values(by = 'Ask-Bid')
+            
+            self.df11.reset_index(inplace = True, drop = True)
+
+            self.model = TableModel(self.df11)
+            self.table.setModel(self.model)
+            
+    def tightPuts(self):
+        if self.rbPut.isChecked():
+            self.df12 = self.df.copy()
+            self.filNum = self.filNum + 1
+            
+            valMax = 1.0
+            self.df12['Ask_1-Bid_1'] = self.df12['Ask_1-Bid_1'].astype(float)
+            self.df12 = (self.df12.loc[self.df12['Ask_1-Bid_1'] <= float(valMax)])
+            self.df12 = self.df12.sort_values(by = 'Ask_1-Bid_1')
+            
+            self.df12.reset_index(inplace = True, drop = True)
+
+            self.model = TableModel(self.df12)
+            self.table.setModel(self.model)
+        
     def minMaxAskVol(self):
         if self.cflag == True:
             self.df3 = self.dfp.copy()
         else:
-            self.df3 = self.df1.copy()
-        
+            self.df3 = self.df.copy()
+            
         if (len(self.leAskVolMin.text()) > 0 and (len(self.leAskVolMax.text())) > 0) \
             and self.rbCall.isChecked():
             self.filNum = self.filNum + 1
-            #Get results from Volat-Bib Minium
+            
+            #Change values in Volat-Ask from percentages to floats
+            self.df3['Volat-Ask'] = self.df3['Volat-Ask'].str.rstrip("%").astype('float')
+            
+            #Filter done using floats
             volMin = self.leAskVolMin.text()
             volMin = float(volMin)
-            #Get results from Volat-Bib Maximum
+            
             volMax = self.leAskVolMax.text()
             volMax = float(volMax)
-            #Convert percent values to floats in Volat-Bid
-            self.df3['Volat-Ask'] = self.df3['Volat-Ask'].str.rstrip("%").astype(float)
-            self.df3 = self.df3.loc[self.df3['Volat-Ask'] >= float(volMin)]
-            self.df3 = self.df3.loc[self.df3['Volat-Ask'] <= float(volMax)]
+            
+            self.df3 = (self.df3.loc[self.df3['Volat-Ask'] >= float(volMin)]) 
+            self.df3 = (self.df3.loc[self.df3["Volat-Ask"] <= float(volMax)])
             self.df3 = self.df3.sort_values(by = 'Volat-Ask')
+            
+            #Strings returned to VolatAsk will now be converted to floats, then to percentages
+            self.df3["Volat-Ask"] = pd.to_numeric(self.df3["Volat-Ask"], downcast="float")
+            self.df3['Volat-Ask'] = pd.Series(["{0:.1f}%".format(val) for val in self.df3['Volat-Ask']], index = self.df3.index)
+                                            
             self.model = TableModel(self.df3)
-            self.table.setModel(self.model) 
+            self.table.setModel(self.model)
+        
         elif (len(self.leAskVolMin.text()) > 0 and (len(self.leAskVolMax.text())) > 0) \
             and self.rbPut.isChecked():
             self.filNum = self.filNum + 1
-            #Get results from Volat-Bib Minium
+            
+            #Change values in Volat-Ask from percentages to floats
+            self.df3['Volat-Ask_1'] = self.df3['Volat-Ask_1'].str.rstrip("%").astype('float')
+            
+            #Filter done using floats
             volMin = self.leAskVolMin.text()
             volMin = float(volMin)
-            #Get results from Volat-Bib Maximum
+            
             volMax = self.leAskVolMax.text()
             volMax = float(volMax)
-            #Convert percent values to floats in Volat-Bid
-            self.df3['Volat-Ask.1'] = self.df3['Volat-Ask.1'].str.rstrip("%").astype(float)
-            self.df3 = self.df3.loc[self.df3['Volat-Ask.1'] >= float(volMin)]
-            self.df3 = self.df3.loc[self.df3['Volat-Ask.1'] <= float(volMax)]
-            self.df3 = self.df3.sort_values(by = 'Volat-Ask.1')
+            
+            self.df3 = (self.df3.loc[self.df3['Volat-Ask_1'] >= float(volMin)]) 
+            self.df3 = (self.df3.loc[self.df3["Volat-Ask_1"] <= float(volMax)])
+            self.df3 = self.df3.sort_values(by = 'Volat-Ask_1')
+            
+            #Strings returned to VolatBid will now be converted to floats, then to percentages
+            self.df3["Volat-Ask_1"] = pd.to_numeric(self.df3["Volat-Ask_1"], downcast="float")
+            self.df3['Volat-Ask_1'] = pd.Series(["{0:.1f}%".format(val) for val in self.df3['Volat-Ask_1']], index = self.df3.index)
+                                            
             self.model = TableModel(self.df3)
-            self.table.setModel(self.model) 
+            self.table.setModel(self.model)
             
         self.dfp = self.df3.copy()
         self.cflag = True
-            
+               
     def minMaxDelta(self):
         if self.cflag == True:
             self.df4 = self.dfp.copy()
         else:
-            self.df4 = self.df1.copy()
+            self.df4 = self.df.copy()
         
         if (len(self.leDelMax.text()) > 0 and (len(self.leDelMin.text())) > 0) and \
             self.rbCall.isChecked():
@@ -728,9 +947,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.filNum = self.filNum + 1
             dtMax = self.leDelMax.text()
             dtMin = self.leDelMin.text()
-            self.df4 = self.df4.loc[self.df4['Delta.1'] >= float(dtMin)]
-            self.df4 = self.df4.loc[self.df4['Delta.1'] <= float(dtMax)]
-            self.df4 = self.df4.sort_values(by = 'Delta.1')
+            self.df4 = self.df4.loc[self.df4['Delta_1'] >= float(dtMin)]
+            self.df4 = self.df4.loc[self.df4['Delta_1'] <= float(dtMax)]
+            self.df4 = self.df4.sort_values(by = 'Delta_1')
             self.model = TableModel(self.df4)
             self.table.setModel(self.model) 
             
@@ -741,26 +960,38 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.cflag == True:
             self.df5 = self.dfp.copy()
         else:
-            self.df5 = self.df1.copy()
+            self.df5 = self.df.copy()
         
         if len(self.leBidAsk.text()) > 0:
             if self.rbCall.isChecked():
+                self.df5['Ask-Bid'] = self.df5['Ask-Bid'].astype(float)
+                print(self.df5.dtypes)
+
                 self.filNum = self.filNum + 1
                 abMax = self.leBidAsk.text()
-                self.df5 = self.df5.loc[self.df1['Ask-Bid'] >= 0.0000]
-                self.df5 = self.df5.loc[self.df1['Ask-Bid'] <= float(abMax)]
+                abMax = float(abMax)
+                abMin = '0.000'
+                abMin = float(abMin)
+                self.df5 = self.df5.loc[self.df5['Ask-Bid'] >= float(abMin)]
+                self.df5 = self.df5.loc[self.df5['Ask-Bid'] <= float(abMax)]
                 self.df5 = self.df5.sort_values(by = 'Ask-Bid')
                 self.model = TableModel(self.df5)
                 self.table.setModel(self.model) 
             elif self.rbPut.isChecked():
+                self.df5['Ask_1-Bid_1'] = self.df5['Ask_1-Bid_1'].astype(float)
+                print(self.df5.dtypes)
+                
                 self.filNum = self.filNum + 1
                 abMax = self.leBidAsk.text()
-                self.df5 = (self.df5.loc[self.df5['Ask-Bid.1'] >= 0.0000]) and \
-                (self.df5.loc[self.df5['Ask-Bid.1'] <= float(abMax)])
-                self.df5 = self.df5.sort_values(by = 'Ask-Bid.1')
+                abMax = float(abMax)
+                abMin = '0.000'
+                abMin = float(abMin)
+                self.df5 = self.df5.loc[self.df5['Ask_1-Bid_1'] >= float(abMin)]
+                self.df5 = self.df5.loc[self.df5['Ask_1-Bid_1'] <= float(abMax)]
+                self.df5 = self.df5.sort_values(by = 'Ask_1-Bid_1')
                 self.model = TableModel(self.df5)
                 self.table.setModel(self.model) 
-                
+             
             self.dfp = self.df5.copy()
             self.cflag = True
         
@@ -772,49 +1003,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.cbExc.isChecked():
             subprocess.check_call(['open', '-a', 'Microsoft Excel'])
             
-    def opMW(self):
-        if self.cbMarWat.isChecked():
-            webbrowser.open('https://www.marketwatch.com/')
-            
-    def delRow(self):
-        if len(self.leDelRow_1.text()) > 0:
-            x = self.leDelRow_1.text()
-            y = int(x)
-            self.df = self.df.drop(self.df.index[y]) 
-            self.model = TableModel(self.df)
-            
-    def delRow_2(self):
-        if len(self.leDelRow_2.text()) > 0:
-            x = self.leDelRow_2.text()
-            y = int(x) - 1
-            self.df = self.df.drop(self.df.index[y]) 
-            self.model = TableModel(self.df)
-            
-    def delRow_3(self):
-        if len(self.leDelRow_3.text()) > 0:
-            x = self.leDelRow_3.text()
-            y = int(x) - 2
-            self.df = self.df.drop(self.df.index[y]) 
-            self.model = TableModel(self.df)
-
-    def delRow_4(self):
-        if len(self.leDelRow_4.text()) > 0:
-            x = self.leDelRow_4.text()
-            y = int(x) - 3
-            self.df = self.df.drop(self.df.index[y]) 
-            self.model = TableModel(self.df)
-            
-    def matTime(self):
-        if len(self.leDelRow_1.text()) == False:
-            return float(self.leMatTim1.text())
-        elif len(self.leDelRow_1.text()) > 0 and len(self.leDelRow_2.text()) == False:
-            return float(self.leMatTim2.text())
-        elif len(self.leDelRow_2.text()) > 0 and len(self.leDelRow_3.text()) == False:
-            return float(self.leMatTim2.text())
-        elif len(self.leDelRow_3.text()) > 0 and len(self.leDelRow_4.text()) == False:
-            return float(self.leMatTim3.text())
-        elif len(self.leDelRow_4.text()) > 0:
-            return float(self.leMatTim4.text())
+    def matTime(self, index):
+        if self.df.loc[index, 'ExpDate'] == self.eDate1:
+            self.mTime1 = self.calc_mat_time1()
+            return self.mTime1
+        elif self.df.loc[index, 'ExpDate'] == self.eDate2:
+            self.mTime2 = self.calc_mat_time2()
+            return self.mTime2
+        elif self.df.loc[index, 'ExpDate'] == self.eDate3:
+            self.mTime3 = self.calc_mat_time3()
+            return self.mTime3
+        elif self.df.loc[index, 'ExpDate'] == self.eDate4:
+            self.mTime3 = self.calc_mat_time4()
+            return self.mTime4
         
     def reload(self):
         self.leStrCurMin.clear()
@@ -828,9 +1029,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.leBidAsk.clear()
         self.loadData()
         
+    def addDat(self):
+        newone = self.leFileName.text()
+        today = date.today()
+        filename = (newone + today.strftime("_%y%d%m"))
+        self.leFileName.setText(filename + ".csv")
         
-        
-        
+  
 class TableModel(QtCore.QAbstractTableModel):
     def __init__(self, data):
         super(TableModel, self).__init__()
